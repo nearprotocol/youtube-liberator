@@ -2,14 +2,10 @@
 
 /* eslint-env browser */
 
-const Ipfs = require('ipfs')
-const VideoStream = require('videostream')
-const {
-  dragDrop,
-  statusMessages,
-  createVideoElement,
-  log
-} = require('./utils')
+const Ipfs = window.Ipfs
+const VideoStream = window.videostream
+
+const log = console.log;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const ipfs = await Ipfs.create({
@@ -70,13 +66,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoElement.addEventListener('error', () => log(videoStream.detailedError))
   }
 
-  // Allow adding files to IPFS via drag and drop
-  dragDrop(ipfs, log)
-
   log('IPFS: Ready')
-  log('IPFS: Drop an .mp4 file into this window to add a file')
   log('IPFS: Then press the "Go!" button to start playing a video')
 
   hashInput.disabled = false
   goButton.disabled = false
 })
+
+const statusMessages = (stream) => {
+  let time = 0
+  const timeouts = [
+    'Stream: Still loading data from IPFS...',
+    'Stream: This can take a while depending on content availability',
+    'Stream: Hopefully not long now',
+    'Stream: *Whistles absentmindedly*',
+    'Stream: *Taps foot*',
+    'Stream: *Looks at watch*',
+    'Stream: *Stares at floor*',
+    'Stream: *Checks phone*',
+    'Stream: *Stares at ceiling*',
+    'Stream: Got anything nice planned for the weekend?'
+  ].map(message => {
+    time += 5000
+
+    return setTimeout(() => {
+      log(message)
+    }, time)
+  })
+
+  stream.once('data', () => {
+    log('Stream: Started receiving data')
+    timeouts.forEach(clearTimeout)
+  })
+  stream.once('error', () => {
+    timeouts.forEach(clearTimeout)
+  })
+}
+
+const createVideoElement = () => {
+  const videoElement = document.getElementById('video')
+  videoElement.addEventListener('loadedmetadata', () => {
+    videoElement.play()
+      .catch(log)
+  })
+
+  const events = [
+    'playing',
+    'waiting',
+    'seeking',
+    'seeked',
+    'ended',
+    'loadedmetadata',
+    'loadeddata',
+    'canplay',
+    'canplaythrough',
+    'durationchange',
+    'play',
+    'pause',
+    'suspend',
+    'emptied',
+    'stalled',
+    'error',
+    'abort'
+  ]
+  events.forEach(event => {
+    videoElement.addEventListener(event, () => {
+      log(`Video: ${event}`)
+    })
+  })
+
+  videoElement.addEventListener('error', () => {
+    log(videoElement.error)
+  })
+
+  return videoElement
+}
