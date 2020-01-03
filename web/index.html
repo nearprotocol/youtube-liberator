@@ -11,60 +11,22 @@ body {
   padding: 0;
 }
 
-#container {
-  display: flex;
-  height: 100vh;
-}
-
-pre {
-  flex-grow: 2;
-  padding: 10px;
-  height: calc(100vh - 45px);
-  overflow: auto;
-}
-
-#form-wrapper {
-  padding: 20px;
-}
-
-form {
-  padding-bottom: 10px;
-  display: flex;
-}
-
-#hash {
-  display: inline-block;
-  margin: 0 10px 10px 0;
-  font-size: 16px;
-  flex-grow: 2;
-  padding: 5px;
-}
-
-button {
-  display: inline-block;
-  font-size: 16px;
-  height: 32px;
-}
-
 video {
   max-width: 50vw;
 }
 
     </style>
+    <script>
+      const BOOTSTRAP_NODES = [
+        "/dns4/ipfs.nearprotocol.com/tcp/443/wss/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz"
+      ];
+      const VIDEO_HASH = "QmazGDrxX63VLThq3pvDyABQv5MCHAAaSosiTDBX2xWwsQ";
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/videostream/dist/index.js"></script>
     <script src="index.js"></script>
   </head>
   <body>
-    <div id="container">
-      <div id="form-wrapper">
-          <form>
-            <input type="text" id="hash" placeholder="Hash" disabled />
-            <button id="gobutton" disabled>Go!</button>
-          </form>
-          <video id="video" controls></video>
-      </div>
-      <pre id="output" style="display: inline-block"></pre>
-    </div>
+    <video id="video" controls></video>
   </body>
 </html>

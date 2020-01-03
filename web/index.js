@@ -12,20 +12,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     repo: 'ipfs-' + Math.random()
   })
   document.ipfs = ipfs;
-  await ipfs.swarm.connect("/ip4/104.248.180.57/tcp/4002/ws/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz");
+  for (let node of BOOTSTRAP_NODES) {
+    await ipfs.swarm.connect(node);
+  }
 
   log('IPFS: Initialising')
 
   // Set up event listeners on the <video> element from index.html
   const videoElement = createVideoElement()
-  const hashInput = document.getElementById('hash')
-  const goButton = document.getElementById('gobutton')
+
   let stream
 
-  goButton.onclick = function (event) {
-    event.preventDefault()
-
-    log(`IPFS: Playing ${hashInput.value.trim()}`)
+  function play(videoHash) {
+    log(`IPFS: Playing ${videoHash}`)
 
     // Set up the video stream an attach it to our <video> element
     const videoStream = new VideoStream({
@@ -46,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // This stream will contain the requested bytes
-        stream = ipfs.catReadableStream(hashInput.value.trim(), {
+        stream = ipfs.catReadableStream(videoHash, {
           offset: start,
           length: end && end - start
         })
@@ -67,10 +66,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   log('IPFS: Ready')
-  log('IPFS: Then press the "Go!" button to start playing a video')
 
-  hashInput.disabled = false
-  goButton.disabled = false
+  play(VIDEO_HASH);
 })
 
 const statusMessages = (stream) => {
