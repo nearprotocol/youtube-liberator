@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function play(videoHash) {
     log(`IPFS: Playing ${videoHash}`)
 
+    videoElement.poster = "https://cloudflare-ipfs.com/ipfs/" + THUMBNAIL_HASH;
+
     // Set up the video stream an attach it to our <video> element
     const videoStream = new VideoStream({
       createReadStream: function createReadStream (opts) {

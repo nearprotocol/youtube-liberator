@@ -3,5 +3,10 @@
   "version": "0.0.1",
   "main": "index.js",
   "author": "Vladimir Grichina <vgrichina@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ipfs": "^0.40.0",
+    "ipfs-http-client": "^40.1.0",
+    "pug": "^2.0.4"
+  }
 }
