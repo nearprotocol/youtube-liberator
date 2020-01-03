@@ -1,0 +1,7 @@
+{
+  "name": "youtube-liberator",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Vladimir Grichina <vgrichina@gmail.com>",
+  "license": "MIT"
+}
