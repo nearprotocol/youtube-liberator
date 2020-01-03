@@ -28,10 +28,8 @@ const readFile = util.promisify(fs.readFile);
     const files = await readdir(dir);
 
     async function printPeers() {
-        const peers = await ipfs.swarm.peers();
-        console.log('peers', peers.map(p => p.addr.toJSON()));
         const addrs = await ipfs.swarm.addrs();
-        console.log('addrs', addrs.map(peerInfo => ({id: peerInfo.id.toB58String(), multiaddrs: peerInfo.multiaddrs.toArray().map(a => a.toString()) })));
+        console.log('addrs', addrs.map(peerInfo => peerInfo.multiaddrs.toArray().map(a => a.toString())));
     }
 
     await printPeers();
