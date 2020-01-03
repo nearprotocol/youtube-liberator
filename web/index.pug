@@ -12,12 +12,15 @@ head
     }
   script.
     const BOOTSTRAP_NODES = [
-      "/dns4/ipfs.nearprotocol.com/tcp/443/wss/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz"
+      "/dns4/ipfs.nearprotocol.com/tcp/4003/wss/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz",
     ];
     const params = new URLSearchParams(document.location.search.substring(1));
     const VIDEO_HASH = '#{videoHash}'
     const THUMBNAIL_HASH = '#{thumbnailHash}';
-  script(src='https://cdn.jsdelivr.net/npm/ipfs/dist/index.js')
-  script(src='https://cdn.jsdelivr.net/npm/videostream/dist/index.js')
-  script(src='https://cloudflare-ipfs.com/ipfs/QmP2cr9RwYD8sH1UWtDuUFYrhkNRd5EW7sKiwjAtgvS2XV')
+  // https://cdn.jsdelivr.net/npm/ipfs/dist/index.js
+  script(src='https://ipfs.nearprotocol.com/ipfs/QmWiugwZBWQbgDce7Gvo3gA6aPUwN5Z9mX3KyBsT989s7n')
+  // https://cdn.jsdelivr.net/npm/videostream/dist/index.js'
+  script(src='https://ipfs.nearprotocol.com/ipfs/QmRLVS9PMEv8Yzb8LePiRnMH5CdsSE61VFkHsoXFWVfPmY')
+  // index.js
+  script(src='https://ipfs.nearprotocol.com/ipfs/QmP2cr9RwYD8sH1UWtDuUFYrhkNRd5EW7sKiwjAtgvS2XV')
 video#video(controls='')

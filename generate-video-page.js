@@ -16,7 +16,7 @@ const readFile = util.promisify(fs.readFile);
 (async () => {
     const ipfs = await IPFS.create();
     // await ipfs.swarm.connect("/dns4/ipfs.nearprotocol.com/tcp/4001/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz");
-    await ipfs.swarm.connect("/dns4/ipfs.nearprotocol.com/tcp/443/wss/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz");
+    await ipfs.swarm.connect("/dns4/ipfs.nearprotocol.com/tcp/4003/wss/ipfs/QmSttCRFW3ibTPBkbimmrfuy1M622qAZ7D1W1s7Wp66mLz");
 
     // const ipfsInfura = await ipfsClient({
     //     host: 'ipfs.infura.io',
