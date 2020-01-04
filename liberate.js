@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const pug = require('pug');
 const IPFS = require('ipfs');
 const ipfsClient = require('ipfs-http-client');
@@ -12,6 +13,24 @@ const fs = require("fs");
 const util = require("util");
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
+const mkdir = util.promisify(fs.mkdir);
+
+const [, , URL, DEST_DIR] = process.argv;
+
+const { spawn } = require('child_process')
+
+function exec(cmd, args, options = {}) {
+    return new Promise((resolve, reject) => {
+        const cmdProcess = spawn(cmd, args, { ...options, stdio: 'inherit' })
+        cmdProcess.on('close', (code) => {
+            if (code != 0) {
+                reject(`'${cmd} ${args.join(' ')}' failed with code: ${code}`)
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 
 (async () => {
     const ipfs = await IPFS.create();
@@ -24,8 +43,14 @@ const readFile = util.promisify(fs.readFile);
     //     protocol: 'https'
     // });
 
-    const dir = './scratch/lunch_learn';
-    const files = await readdir(dir);
+    const destDir = DEST_DIR;
+
+    await mkdir(destDir, { recursive: true });
+
+    // TODO: Use https://github.com/przemyslawpluta/node-youtube-dl?
+    await exec('/usr/bin/env', ['youtube-dl', '-o', '%(id)s.%(ext)s', URL, '-f', 'mp4', '--write-thumbnail', '--write-info-json'], { cwd: destDir }); 
+
+    const files = await readdir(destDir);
 
     async function printPeers() {
         const addrs = await ipfs.swarm.addrs();
@@ -35,7 +60,7 @@ const readFile = util.promisify(fs.readFile);
     await printPeers();
     for (let f of files) {
         if (/.+\.mp4$/.exec(f)) {
-            const videoFile = `${dir}/${f}`;
+            const videoFile = `${destDir}/${f}`;
             const jsonFile = videoFile.replace(/\.mp4$/, '.info.json');
             const json = JSON.parse(await readFile(jsonFile));
             const thumbnailFile = videoFile.replace(/\.mp4$/, '.jpg');
