@@ -8,6 +8,12 @@ const VideoStream = window.videostream
 const log = console.log;
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (!('MediaSource' in window)) {
+    const videoElement = getVideoElement();
+    videoElement.src = 'https://ipfs.nearprotocol.com/ipfs/' + VIDEO_HASH;
+    return;
+  }
+
   const ipfs = await Ipfs.create({
     repo: 'ipfs-' + Math.random()
   })
@@ -19,14 +25,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   log('IPFS: Initialising')
 
   // Set up event listeners on the <video> element from index.html
-  const videoElement = createVideoElement()
+  const videoElement = setupVideoElement()
 
   let stream
 
   function play(videoHash) {
     log(`IPFS: Playing ${videoHash}`)
-
-    videoElement.poster = "https://cloudflare-ipfs.com/ipfs/" + THUMBNAIL_HASH;
 
     // Set up the video stream an attach it to our <video> element
     const videoStream = new VideoStream({
@@ -102,8 +106,12 @@ const statusMessages = (stream) => {
   })
 }
 
-const createVideoElement = () => {
-  const videoElement = document.getElementById('video')
+function getVideoElement() {
+  return document.getElementById('video');
+}
+
+const setupVideoElement = () => {
+  const videoElement = getVideoElement();
   videoElement.addEventListener('loadedmetadata', () => {
     videoElement.play()
       .catch(log)
